@@ -33,7 +33,7 @@ const STEPS = [
     { icon: '🏗️', label: 'Casting', desc: 'Element poured and formed' },
     { icon: '📡', label: 'Sensors', desc: 'IoT monitors temp, humidity, resistance' },
     { icon: '🧠', label: 'AI Analysis', desc: 'Strength & timeline predicted' },
-    { icon: '🚀', label: 'De-mould', desc: 'Faster, safer de-moulding decision' },
+    { icon: '🛠️', label: 'De-mould', desc: 'Faster, safer de-moulding decision' },
 ];
 
 function Counter({ target, suffix = '' }) {
@@ -108,7 +108,22 @@ export default function Landing() {
     }, []);
 
     return (
-        <div style={{ background: 'var(--bg-primary)', minHeight: '100vh' }}>
+        <div style={{ background: 'var(--bg-primary)', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+            {/* Construction net overlay */}
+            <div className="construction-net">
+                <div className="construction-mesh" />
+            </div>
+            <div className="guide-line" aria-hidden="true" />
+
+            {/* Crane SVG (decorative) */}
+            <svg className="crane" viewBox="0 0 200 140" aria-hidden="true">
+                <g fill="none" stroke="#ffd166" strokeWidth="3">
+                    <path className="arm" d="M10 120 L120 20 L160 40" stroke="#ffd166" strokeWidth="3" strokeLinecap="round" />
+                    <path d="M120 20 L120 120" stroke="#ffd166" strokeWidth="2" strokeLinecap="round" />
+                    <circle cx="10" cy="120" r="6" fill="#ef4444" />
+                    <rect x="118" y="116" width="12" height="18" fill="#f59e0b" />
+                </g>
+            </svg>
             {/* Navbar */}
             <nav style={{
                 position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
@@ -118,7 +133,7 @@ export default function Landing() {
                 borderBottom: '1px solid var(--border)'
             }}>
                 <div style={{ fontSize: 22, fontWeight: 900 }}>
-                    <span className="gradient-text-cyan">⚙ APIE</span>
+                    <span className="gradient-text-cyan">⚙ Construct AI</span>
                 </div>
                 <div style={{ display: 'flex', gap: 12 }}>
                     <Link to="/login" className="btn btn-secondary btn-sm">Sign In</Link>
@@ -131,14 +146,14 @@ export default function Landing() {
                 <div className="hero-gradient" />
                 <div className="hero-content fade-in" style={{ textAlign: 'center', maxWidth: 900, margin: '0 auto' }}>
                     <div className="hero-tag">
-                        <Zap size={12} /> AI + IoT · Precast Intelligence
+                        <Zap size={12} /> Smart Construction
                     </div>
                     <h1 className="hero-title">
                         <span className="gradient-text-cyan">Reduce Curing Time</span><br />
                         with AI‑Powered Sensor Intelligence
                     </h1>
                     <p className="hero-subtitle" style={{ margin: '0 auto 36px' }}>
-                        APIE connects live IoT sensors to AI prediction models, giving precast yard managers
+                        Construct AI connects live IoT sensors to AI prediction models, giving precast yard managers
                         real-time visibility into concrete strength gain — enabling faster, safer de-moulding decisions.
                     </p>
                     <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -318,7 +333,7 @@ export default function Landing() {
                     <div className="grid-2" style={{ gap: 32 }}>
                         <div className="card" style={{ borderColor: 'rgba(248,113,113,0.25)' }}>
                             <h3 style={{ color: 'var(--red)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                                ❌ Traditional Method
+                                 Traditional Method
                             </h3>
                             {['Fixed 32–36 hour curing schedule', 'No real-time strength data', 'Over-curing wastes yard space', 'Human judgment = higher risk', 'Production bottlenecks'].map(p => (
                                 <div key={p} style={{ display: 'flex', gap: 10, marginBottom: 10, color: 'var(--text-secondary)', fontSize: 14 }}>
@@ -328,7 +343,7 @@ export default function Landing() {
                         </div>
                         <div className="card" style={{ borderColor: 'rgba(56,189,248,0.25)' }}>
                             <h3 style={{ color: 'var(--cyan)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                                ✅ APIE AI Method
+                                 Construct AI Method
                             </h3>
                             {['Dynamic prediction: 18–28 hrs average', 'Live sensor data every 3 seconds', 'Saves 8+ hours per cycle', 'Confidence score for safe de-moulding', 'Maximize throughput & yard utilization'].map(p => (
                                 <div key={p} style={{ display: 'flex', gap: 10, marginBottom: 10, color: 'var(--text-secondary)', fontSize: 14 }}>
@@ -345,7 +360,7 @@ export default function Landing() {
                 <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
                     <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 12 }}>How It Works</h2>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: 48, fontSize: 15 }}>
-                        From casting to de-moulding, APIE monitors every step
+                        From casting to de-moulding, Construct AI monitors every step
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, flexWrap: 'wrap' }}>
                         {STEPS.map((step, i) => (
@@ -374,7 +389,7 @@ export default function Landing() {
             <section style={{ padding: '60px 48px 100px', textAlign: 'center', background: 'var(--bg-secondary)', borderTop: '1px solid var(--border)' }}>
                 <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 12 }}>Ready to optimize your precast yard?</h2>
                 <p style={{ color: 'var(--text-secondary)', marginBottom: 32, fontSize: 15 }}>
-                    Start a session, connect your sensors, and let APIE do the rest.
+                    Start a session, connect your sensors, and let Construct AI do the rest.
                 </p>
                 <Link to="/smart-slab" className="btn btn-primary btn-lg">
                     <Cpu size={18} /> Start Smart Slab Analysis
@@ -382,14 +397,14 @@ export default function Landing() {
             </section>
 
             {/* Footer */}
-            <footer style={{ padding: '24px 48px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>© 2024 APIE · AI-Powered Precast Intelligence Engine</span>
+            {/* <footer style={{ padding: '24px 48px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>© 2024 Construct AI · AI-Powered Precast Intelligence Engine</span>
                 <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>MERN Stack · IoT Simulation · AI Prediction</span>
-            </footer>
+            </footer> */}
         </div>
     );
 }
 
 // Missing imports used in Landing
-function LayoutDashboard({ size }) { return <span style={{ fontSize: size }}>📊</span> }
-function Box({ size }) { return <span style={{ fontSize: size }}>📦</span> }
+function LayoutDashboard({ size }) { return <span style={{ fontSize: size }}>➤</span> }
+function Box({ size }) { return <span style={{ fontSize: size }}>➤</span> }

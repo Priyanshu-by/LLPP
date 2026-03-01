@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const API = 'http://localhost:5000/api';
-const STORAGE_KEY = 'apie_settings';
+const STORAGE_KEY = 'constructai_settings';
 
 // ── Defaults (targetStrength removed per user request) ─────────────────────
 const DEFAULTS = {
@@ -196,7 +196,7 @@ export default function Settings() {
 
                     <div className="alert-banner info" style={{ marginBottom: 0, marginTop: 8 }}>
                         <span>ℹ️</span>
-                        <span style={{ fontSize: 12 }}>Baseline hours are used to calculate how many hours APIE saves per cycle.</span>
+                        <span style={{ fontSize: 12 }}>Baseline hours are used to calculate how many hours Construct AI saves per cycle.</span>
                     </div>
                 </div>
 

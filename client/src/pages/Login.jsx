@@ -19,8 +19,8 @@ export default function Login() {
                 body: JSON.stringify(form)
             });
             const json = await res.json();
-            if (json.success) {
-                sessionStorage.setItem('apie_user', JSON.stringify(json.data.user));
+                    if (json.success) {
+                        sessionStorage.setItem('constructai_user', JSON.stringify(json.data.user));
                 navigate('/dashboard');
             } else {
                 setError(json.error || 'Login failed');
@@ -42,7 +42,7 @@ export default function Login() {
             <div style={{ width: '100%', maxWidth: 420, padding: '0 24px', zIndex: 1 }} className="fade-in">
                 {/* Logo */}
                 <div style={{ textAlign: 'center', marginBottom: 32 }}>
-                    <div className="logo-badge" style={{ fontSize: 28, fontWeight: 900 }}>⚙ APIE</div>
+                    <div className="logo-badge" style={{ fontSize: 28, fontWeight: 900 }}>⚙ Construct AI</div>
                     <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>Precast Intelligence Engine</div>
                 </div>
 

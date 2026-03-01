@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 
 const API = 'http://localhost:5000/api';
-const STORAGE_KEY = 'apie_settings';
+const STORAGE_KEY = 'constructai_settings';
 
 const navItems = [
     { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -70,7 +70,7 @@ export default function Layout() {
             {/* ── Sidebar ─────────────────────────────────────────── */}
             <aside className={`sidebar${sidebarOpen ? ' sidebar-open' : ''}`}>
                 <div className="sidebar-logo">
-                    <div className="logo-badge">⚙ APIE</div>
+                    <div className="logo-badge">⚙ Construct AI</div>
                     <p>Precast Intelligence Engine</p>
                 </div>
 
@@ -106,6 +106,7 @@ export default function Layout() {
 
                     {/* Row 1: branding + right actions */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+<<<<<<< HEAD
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                             {/* Hamburger — hidden on desktop, shown on tablet/mobile via CSS */}
                             <button
@@ -121,6 +122,9 @@ export default function Layout() {
                             >☰</button>
                             <span className="topbar-title">⚙ APIE · Precast Intelligence Engine</span>
                         </div>
+=======
+                        <span className="topbar-title">⚙ Construct AI · Precast Intelligence Engine</span>
+>>>>>>> 116d15e5613f8f6755533b5e5c3c6a40fd5c9528
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                             {/* Home button */}
                             <button
@@ -137,7 +141,7 @@ export default function Layout() {
                                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(56,189,248,0.18)'; e.currentTarget.style.borderColor = 'rgba(56,189,248,0.5)'; }}
                                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(56,189,248,0.08)'; e.currentTarget.style.borderColor = 'rgba(56,189,248,0.25)'; }}
                             >
-                                🏠 Home
+                             Home ➤
                             </button>
                             {/* Avatar */}
                             <div style={{

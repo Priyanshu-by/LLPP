@@ -36,13 +36,13 @@ export default function Register() {
             <div className="hero-gradient" />
             <div style={{ width: '100%', maxWidth: 440, padding: '0 24px', zIndex: 1 }} className="fade-in">
                 <div style={{ textAlign: 'center', marginBottom: 32 }}>
-                    <div className="logo-badge" style={{ fontSize: 28, fontWeight: 900 }}>⚙ APIE</div>
+                    <div className="logo-badge" style={{ fontSize: 28, fontWeight: 900 }}>⚙ Construct AI</div>
                     <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>Create your plant account</div>
                 </div>
 
                 <div className="card">
                     <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 6 }}>Create account</h2>
-                    <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 24 }}>Join the APIE precast intelligence platform</p>
+                    <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 24 }}>Join the Construct AI precast intelligence platform</p>
 
                     {error && <div className="alert-banner warning" style={{ marginBottom: 16 }}><span>⚠️</span>{error}</div>}
 
