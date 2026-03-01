@@ -106,7 +106,6 @@ export default function Layout() {
 
                     {/* Row 1: branding + right actions */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-<<<<<<< HEAD
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                             {/* Hamburger — hidden on desktop, shown on tablet/mobile via CSS */}
                             <button
@@ -122,9 +121,6 @@ export default function Layout() {
                             >☰</button>
                             <span className="topbar-title">⚙ APIE · Precast Intelligence Engine</span>
                         </div>
-=======
-                        <span className="topbar-title">⚙ Construct AI · Precast Intelligence Engine</span>
->>>>>>> 116d15e5613f8f6755533b5e5c3c6a40fd5c9528
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                             {/* Home button */}
                             <button

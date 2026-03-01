@@ -115,15 +115,6 @@ export default function Landing() {
             </div>
             <div className="guide-line" aria-hidden="true" />
 
-            {/* Crane SVG (decorative) */}
-            <svg className="crane" viewBox="0 0 200 140" aria-hidden="true">
-                <g fill="none" stroke="#ffd166" strokeWidth="3">
-                    <path className="arm" d="M10 120 L120 20 L160 40" stroke="#ffd166" strokeWidth="3" strokeLinecap="round" />
-                    <path d="M120 20 L120 120" stroke="#ffd166" strokeWidth="2" strokeLinecap="round" />
-                    <circle cx="10" cy="120" r="6" fill="#ef4444" />
-                    <rect x="118" y="116" width="12" height="18" fill="#f59e0b" />
-                </g>
-            </svg>
             {/* Navbar */}
             <nav style={{
                 position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
