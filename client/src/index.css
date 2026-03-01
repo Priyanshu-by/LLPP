@@ -127,7 +127,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 18px;
   scroll-behavior: smooth;
 }
 
@@ -168,7 +168,8 @@ body {
 
 .page-wrapper {
   padding: 32px;
-  max-width: 1400px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Sidebar ───────────────────────────────────────────────────────── */
@@ -294,7 +295,7 @@ body {
 }
 
 .status-label {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
@@ -317,7 +318,7 @@ body {
 }
 
 .card-title {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -326,7 +327,7 @@ body {
 }
 
 .card-value {
-  font-size: 32px;
+  font-size: 38px;
   font-weight: 800;
   line-height: 1;
 }
@@ -374,7 +375,7 @@ body {
 }
 
 .kpi-card .label {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   font-weight: 500;
   margin-bottom: 4px;
@@ -383,12 +384,12 @@ body {
 }
 
 .kpi-card .value {
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 800;
 }
 
 .kpi-card .sub {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-muted);
   margin-top: 4px;
 }
@@ -402,18 +403,18 @@ body {
 }
 
 .section-title {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
 }
 
 .section-sub {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-secondary);
   margin-top: 2px;
 }
 
 .page-title {
-  font-size: 26px;
+  font-size: 32px;
   font-weight: 800;
   margin-bottom: 4px;
 }
@@ -750,6 +751,34 @@ body {
   }
 }
 
+@keyframes demo-btn-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.15), 0 0 0 0 rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.35);
+  }
+
+  50% {
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.35), 0 0 40px rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.65);
+  }
+}
+
+@keyframes play-icon-breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+  }
+
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 22px rgba(56, 189, 248, 0.75), 0 0 40px rgba(129, 140, 248, 0.3);
+  }
+}
+
 @keyframes shimmer {
   0% {
     background-position: 200% 0
@@ -766,6 +795,72 @@ body {
 
 .float {
   animation: float 3s ease infinite;
+}
+
+/* ── KPI Icon Animations ────────────────────────────────────────────── */
+@keyframes kpi-breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.18);
+    opacity: 0.85;
+  }
+}
+
+@keyframes kpi-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes kpi-ping {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+
+  80% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes kpi-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-6px);
+  }
+
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes kpi-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-5px) rotate(8deg);
+  }
 }
 
 /* ── Grid layouts ───────────────────────────────────────────────────── */
@@ -1017,4 +1112,113 @@ body {
   line-height: 1.7;
   margin-bottom: 36px;
   max-width: 600px;
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Tablet ≤ 960px
+══════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+
+  /* Sidebar hidden off-screen by default */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 200;
+  }
+
+  /* When menu is open */
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  /* Overlay behind open sidebar */
+  .sidebar-overlay {
+    display: block !important;
+  }
+
+  /* Main content takes full width */
+  .main-content {
+    margin-left: 0;
+  }
+
+  /* Topbar hamburger button visible */
+  .topbar-hamburger {
+    display: flex !important;
+  }
+
+  /* Grids become 2-column */
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .page-title {
+    font-size: 26px;
+  }
+
+  .section-title {
+    font-size: 19px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — Mobile ≤ 600px
+══════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  html {
+    font-size: 15px;
+  }
+
+  .page-wrapper {
+    padding: 16px;
+  }
+
+  /* All grids → single column */
+  .grid-4,
+  .grid-3,
+  .grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .section-title {
+    font-size: 17px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .kpi-card .value {
+    font-size: 26px;
+  }
+
+  .card-value {
+    font-size: 28px;
+  }
+
+  /* Topbar sensor strip wraps nicely */
+  .topbar {
+    padding: 8px 14px;
+  }
+
+  .topbar-title {
+    font-size: 13px;
+  }
+
+  /* Table horizontal scroll */
+  .data-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }

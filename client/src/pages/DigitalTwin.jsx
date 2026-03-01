@@ -127,6 +127,11 @@ export default function DigitalTwin() {
         } catch { return { length: 6, breadth: 1.2, height: 0.2, elementType: 'Slab' }; }
     };
     const [dims, setDims] = useState(loadGeo);
+    // Raw string state so users can freely clear/type without snapping back
+    const [rawDims, setRawDims] = useState(() => {
+        const g = loadGeo();
+        return { length: String(g.length), breadth: String(g.breadth), height: String(g.height) };
+    });
 
     useEffect(() => {
         // Load prediction insights
@@ -254,10 +259,16 @@ export default function DigitalTwin() {
                                     <input
                                         type="number"
                                         className="form-input"
-                                        value={dims[key]}
+                                        value={rawDims[key]}
                                         min={min}
                                         step={step}
-                                        onChange={e => setDims(d => ({ ...d, [key]: parseFloat(e.target.value) || min }))}
+                                        onChange={e => setRawDims(r => ({ ...r, [key]: e.target.value }))}
+                                        onBlur={e => {
+                                            const parsed = parseFloat(e.target.value);
+                                            const val = isNaN(parsed) || parsed < min ? min : parsed;
+                                            setRawDims(r => ({ ...r, [key]: String(val) }));
+                                            setDims(d => ({ ...d, [key]: val }));
+                                        }}
                                         style={{
                                             padding: '6px 10px', fontSize: 16, fontWeight: 700,
                                             fontFamily: 'var(--font-mono)', color: 'var(--cyan)',

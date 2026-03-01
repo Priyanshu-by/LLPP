@@ -22,6 +22,7 @@ export default function Layout() {
     const navigate = useNavigate();
     const [sensor, setSensor] = useState({ temperature: 27.5, humidity: 68, resistance: 915 });
     const [sensorLive, setSensorLive] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // Load cement setting from localStorage
     const savedSettings = (() => {
@@ -52,8 +53,22 @@ export default function Layout() {
 
     return (
         <div className="app-shell">
+            {/* Mobile overlay */}
+            <div
+                className="sidebar-overlay"
+                onClick={() => setSidebarOpen(false)}
+                style={{
+                    display: 'none', position: 'fixed', inset: 0,
+                    background: 'rgba(0,0,0,0.55)', zIndex: 190,
+                    backdropFilter: 'blur(2px)',
+                    opacity: sidebarOpen ? 1 : 0,
+                    pointerEvents: sidebarOpen ? 'auto' : 'none',
+                    transition: 'opacity 0.3s',
+                }}
+            />
+
             {/* ── Sidebar ─────────────────────────────────────────── */}
-            <aside className="sidebar">
+            <aside className={`sidebar${sidebarOpen ? ' sidebar-open' : ''}`}>
                 <div className="sidebar-logo">
                     <div className="logo-badge">⚙ APIE</div>
                     <p>Precast Intelligence Engine</p>
@@ -91,7 +106,21 @@ export default function Layout() {
 
                     {/* Row 1: branding + right actions */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                        <span className="topbar-title">⚙ APIE · Precast Intelligence Engine</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            {/* Hamburger — hidden on desktop, shown on tablet/mobile via CSS */}
+                            <button
+                                className="topbar-hamburger"
+                                onClick={() => setSidebarOpen(o => !o)}
+                                style={{
+                                    display: 'none', alignItems: 'center', justifyContent: 'center',
+                                    background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border)',
+                                    borderRadius: 8, width: 36, height: 36,
+                                    color: 'var(--text-primary)', fontSize: 18, cursor: 'pointer',
+                                    flexShrink: 0,
+                                }}
+                            >☰</button>
+                            <span className="topbar-title">⚙ APIE · Precast Intelligence Engine</span>
+                        </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                             {/* Home button */}
                             <button

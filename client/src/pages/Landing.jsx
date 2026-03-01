@@ -2,12 +2,32 @@ import { Link } from 'react-router-dom';
 import { Zap, Cpu, Clock, ChevronRight, ArrowRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-const STATS = [
-    { value: '8.4h', label: 'Avg Hours Saved', color: 'var(--cyan)' },
-    { value: '23%', label: 'Yard Space Optimized', color: 'var(--green)' },
-    { value: '94%', label: 'AI Accuracy', color: 'var(--purple)' },
-    { value: '312', label: 'Elements Predicted', color: 'var(--orange)' },
-];
+const API = 'http://localhost:5000/api';
+
+const STAT_COLORS = ['var(--cyan)', 'var(--green)', 'var(--purple)', 'var(--orange)'];
+const STAT_LABELS = ['Avg Hours Saved', 'Yard Space Optimized', 'AI Accuracy', 'Elements Predicted'];
+
+function computeStats(records) {
+    if (!records || records.length === 0) {
+        return [
+            { value: '0h', label: STAT_LABELS[0], color: STAT_COLORS[0] },
+            { value: '0%', label: STAT_LABELS[1], color: STAT_COLORS[1] },
+            { value: '0%', label: STAT_LABELS[2], color: STAT_COLORS[2] },
+            { value: '0', label: STAT_LABELS[3], color: STAT_COLORS[3] },
+        ];
+    }
+    const avgHours = (records.reduce((s, r) => s + (r.hoursSaved || 0), 0) / records.length).toFixed(1);
+    const completed = records.filter(r => r.status === 'Completed').length;
+    const yardPct = Math.round((completed / records.length) * 100);
+    const avgConf = Math.round(records.filter(r => r.confidenceScore).reduce((s, r) => s + r.confidenceScore, 0) / records.filter(r => r.confidenceScore).length || 0);
+    const total = records.length;
+    return [
+        { value: `${avgHours}h`, label: STAT_LABELS[0], color: STAT_COLORS[0] },
+        { value: `${yardPct}%`, label: STAT_LABELS[1], color: STAT_COLORS[1] },
+        { value: `${avgConf}%`, label: STAT_LABELS[2], color: STAT_COLORS[2] },
+        { value: `${total}`, label: STAT_LABELS[3], color: STAT_COLORS[3] },
+    ];
+}
 
 const STEPS = [
     { icon: '🏗️', label: 'Casting', desc: 'Element poured and formed' },
@@ -34,9 +54,57 @@ function Counter({ target, suffix = '' }) {
 
 export default function Landing() {
     const [activeStep, setActiveStep] = useState(0);
+    const [showVideo, setShowVideo] = useState(false);
+    const [stats, setStats] = useState([
+        { value: '—', label: STAT_LABELS[0], color: STAT_COLORS[0] },
+        { value: '—', label: STAT_LABELS[1], color: STAT_COLORS[1] },
+        { value: '—', label: STAT_LABELS[2], color: STAT_COLORS[2] },
+        { value: '—', label: STAT_LABELS[3], color: STAT_COLORS[3] },
+    ]);
+
     useEffect(() => {
         const t = setInterval(() => setActiveStep(s => (s + 1) % STEPS.length), 1800);
         return () => clearInterval(t);
+    }, []);
+
+    // Fetch real records to compute accurate stats
+    useEffect(() => {
+        // Fallback records — mirror the server's default mock data
+        const FALLBACK_RECORDS = [
+            { elementId: 'S-12', hoursSaved: 8, confidenceScore: 91, status: 'Curing' },
+            { elementId: 'B-07', hoursSaved: 6, confidenceScore: 87, status: 'Ready to De-mould' },
+            { elementId: 'C-03', hoursSaved: 8, confidenceScore: 83, status: 'Completed' },
+            { elementId: 'S-11', hoursSaved: 9, confidenceScore: 93, status: 'Completed' },
+        ];
+
+        const fetchStats = async () => {
+            try {
+                const res = await fetch(`${API}/records`);
+                const json = await res.json();
+                if (json.success && json.data && json.data.length > 0) {
+                    let allRecords = [...json.data];
+                    try {
+                        const local = JSON.parse(localStorage.getItem('apie_completed_records') || '[]');
+                        const apiIds = new Set(allRecords.map(r => r.elementId));
+                        local.forEach(r => { if (!apiIds.has(r.elementId)) allRecords.push(r); });
+                    } catch { }
+                    setStats(computeStats(allRecords));
+                    return;
+                }
+            } catch { }
+
+            // API failed or returned empty — try localStorage, then use fallback
+            try {
+                const local = JSON.parse(localStorage.getItem('apie_completed_records') || '[]');
+                const combined = [...FALLBACK_RECORDS];
+                const fallbackIds = new Set(combined.map(r => r.elementId));
+                local.forEach(r => { if (!fallbackIds.has(r.elementId)) combined.push(r); });
+                setStats(computeStats(combined));
+            } catch {
+                setStats(computeStats(FALLBACK_RECORDS));
+            }
+        };
+        fetchStats();
     }, []);
 
     return (
@@ -81,14 +149,155 @@ export default function Landing() {
                             <Box size={18} /> View Digital Twin
                         </Link>
                     </div>
+
+                    {/* ── Animated Demo Video Button ── */}
+                    <div style={{ marginTop: 36, display: 'flex', justifyContent: 'center' }}>
+                        <button
+                            onClick={() => setShowVideo(true)}
+                            style={{
+                                position: 'relative',
+                                display: 'flex', alignItems: 'center', gap: 14,
+                                background: 'rgba(56,189,248,0.07)',
+                                border: '1.5px solid rgba(56,189,248,0.35)',
+                                borderRadius: 50,
+                                padding: '12px 28px 12px 14px',
+                                cursor: 'pointer',
+                                color: 'var(--text-primary)',
+                                fontSize: 15, fontWeight: 700,
+                                backdropFilter: 'blur(10px)',
+                                transition: 'all 0.3s ease',
+                                animation: 'demo-btn-glow 2.5s ease-in-out infinite',
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.background = 'rgba(56,189,248,0.15)';
+                                e.currentTarget.style.borderColor = 'rgba(56,189,248,0.7)';
+                                e.currentTarget.style.transform = 'scale(1.04)';
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.background = 'rgba(56,189,248,0.07)';
+                                e.currentTarget.style.borderColor = 'rgba(56,189,248,0.35)';
+                                e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                        >
+                            {/* Pulsing Play Circle */}
+                            <span style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span style={{
+                                    position: 'absolute',
+                                    width: 44, height: 44,
+                                    borderRadius: '50%',
+                                    background: 'rgba(56,189,248,0.18)',
+                                    animation: 'pulse-ring 1.6s ease-out infinite',
+                                }} />
+                                <span style={{
+                                    position: 'absolute',
+                                    width: 56, height: 56,
+                                    borderRadius: '50%',
+                                    background: 'rgba(56,189,248,0.08)',
+                                    animation: 'pulse-ring 1.6s ease-out infinite 0.4s',
+                                }} />
+                                <span style={{
+                                    width: 38, height: 38, borderRadius: '50%',
+                                    background: 'linear-gradient(135deg, #38bdf8, #818cf8)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    boxShadow: '0 0 18px rgba(56,189,248,0.5)',
+                                    flexShrink: 0, zIndex: 1,
+                                    animation: 'play-icon-breathe 2.5s ease-in-out infinite',
+                                }}>
+                                    <svg width="14" height="16" viewBox="0 0 14 16" fill="white">
+                                        <path d="M0 0 L14 8 L0 16 Z" />
+                                    </svg>
+                                </span>
+                            </span>
+                            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1 }}>
+                                <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: '0.01em' }}>Watch Demo Video</span>
+                                <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 400 }}>See APIE in action · 2 mins</span>
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </section>
+
+            {/* ── Video Modal ── */}
+            {showVideo && (
+                <div
+                    onClick={() => setShowVideo(false)}
+                    style={{
+                        position: 'fixed', inset: 0, zIndex: 2000,
+                        background: 'rgba(0,0,0,0.92)',
+                        backdropFilter: 'blur(12px)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        animation: 'fade-in 0.25s ease',
+                        padding: '20px',
+                    }}
+                >
+                    <div
+                        onClick={e => e.stopPropagation()}
+                        style={{
+                            position: 'relative',
+                            width: '100%', maxWidth: 900,
+                            borderRadius: 20,
+                            overflow: 'hidden',
+                            boxShadow: '0 0 80px rgba(56,189,248,0.25), 0 40px 100px rgba(0,0,0,0.7)',
+                            border: '1px solid rgba(56,189,248,0.25)',
+                            animation: 'slide-up 0.3s ease',
+                            background: '#000',
+                        }}
+                    >
+                        {/* Modal Header */}
+                        <div style={{
+                            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                            padding: '14px 20px',
+                            background: 'rgba(7,9,15,0.95)',
+                            borderBottom: '1px solid rgba(56,189,248,0.15)',
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <span style={{
+                                    width: 8, height: 8, borderRadius: '50%',
+                                    background: '#38bdf8',
+                                    display: 'inline-block',
+                                    boxShadow: '0 0 8px #38bdf8',
+                                    animation: 'play-icon-breathe 1.5s ease-in-out infinite',
+                                }} />
+                                <span style={{ fontWeight: 700, fontSize: 14 }}>APIE Platform Demo</span>
+                                <span style={{ fontSize: 11, color: 'var(--text-muted)', background: 'rgba(56,189,248,0.1)', padding: '2px 8px', borderRadius: 20, border: '1px solid rgba(56,189,248,0.2)' }}>Live Preview</span>
+                            </div>
+                            <button
+                                onClick={() => setShowVideo(false)}
+                                style={{
+                                    background: 'rgba(248,113,113,0.12)',
+                                    border: '1px solid rgba(248,113,113,0.3)',
+                                    borderRadius: 8, color: '#f87171',
+                                    cursor: 'pointer', padding: '6px 14px',
+                                    fontSize: 13, fontWeight: 700,
+                                    transition: 'all 0.2s',
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(248,113,113,0.25)'}
+                                onMouseLeave={e => e.currentTarget.style.background = 'rgba(248,113,113,0.12)'}
+                            >✕ Close</button>
+                        </div>
+                        {/* 16:9 iframe */}
+                        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                            <iframe
+                                src="https://www.youtube.com/embed/ScMzIvxBSi4?autoplay=1&rel=0&modestbranding=1"
+                                title="APIE Demo Video"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                style={{
+                                    position: 'absolute', top: 0, left: 0,
+                                    width: '100%', height: '100%',
+                                    border: 'none',
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* KPI Stats */}
             <section style={{ padding: '0 48px 80px' }}>
                 <div style={{ maxWidth: 1100, margin: '0 auto' }}>
                     <div className="grid-4">
-                        {STATS.map(s => (
+                        {stats.map(s => (
                             <div key={s.label} className="card" style={{ textAlign: 'center' }}>
                                 <div style={{ fontSize: 40, fontWeight: 900, color: s.color, fontFamily: 'var(--font-mono)' }}>
                                     {s.value}

@@ -243,11 +243,67 @@ export default function Dashboard() {
 
     const removeElement = (id) => setElements(prev => prev.filter(e => e.id !== id));
 
+    // Animated SVG icon components for KPI cards
+    const KpiIcon = ({ type, color }) => {
+        const wrap = {
+            width: 52, height: 52, borderRadius: 16,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            marginBottom: 14, position: 'relative', overflow: 'visible',
+            background: `${color}18`,
+            border: `1.5px solid ${color}40`,
+            boxShadow: `0 0 18px ${color}30`,
+        };
+        if (type === 'curing') return (
+            <div style={wrap}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style={{ animation: 'kpi-breathe 2s ease-in-out infinite' }}>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill={`${color}25`} />
+                    <path d="M12 6v6l4 2" stroke={color} strokeWidth="2" strokeLinecap="round" />
+                    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill="none" strokeDasharray="4 2"
+                        style={{ animation: 'kpi-spin 8s linear infinite', transformOrigin: 'center' }} />
+                    <circle cx="12" cy="12" r="3" fill={color} style={{ animation: 'kpi-breathe 2s ease-in-out infinite' }} />
+                </svg>
+                <span style={{ position: 'absolute', inset: -4, borderRadius: 20, border: `1px solid ${color}30`, animation: 'kpi-ping 2.2s ease-out infinite' }} />
+            </div>
+        );
+        if (type === 'demould') return (
+            <div style={wrap}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style={{ animation: 'kpi-bounce 1.4s ease-in-out infinite' }}>
+                    <path d="M20 6L9 17l-5-5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.5" fill={`${color}20`} />
+                </svg>
+            </div>
+        );
+        if (type === 'total') return (
+            <div style={wrap}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style={{ animation: 'kpi-float 2.5s ease-in-out infinite' }}>
+                    <rect x="3" y="3" width="7" height="7" rx="2" fill={`${color}40`} stroke={color} strokeWidth="1.5" />
+                    <rect x="14" y="3" width="7" height="7" rx="2" fill={`${color}25`} stroke={color} strokeWidth="1.5" />
+                    <rect x="3" y="14" width="7" height="7" rx="2" fill={`${color}25`} stroke={color} strokeWidth="1.5" />
+                    <rect x="14" y="14" width="7" height="7" rx="2" fill={`${color}40`} stroke={color} strokeWidth="1.5" />
+                </svg>
+            </div>
+        );
+        if (type === 'sensors') return (
+            <div style={wrap}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="3" fill={color} style={{ animation: 'kpi-breathe 1.6s ease-in-out infinite' }} />
+                    <circle cx="12" cy="12" r="6" stroke={color} strokeWidth="1.2" fill="none" strokeOpacity="0.5"
+                        style={{ animation: 'kpi-ping 1.6s ease-out infinite' }} />
+                    <circle cx="12" cy="12" r="9.5" stroke={color} strokeWidth="1" fill="none" strokeOpacity="0.25"
+                        style={{ animation: 'kpi-ping 1.6s ease-out infinite 0.4s' }} />
+                    <line x1="12" y1="2" x2="12" y2="5" stroke={color} strokeWidth="2" strokeLinecap="round" style={{ animation: 'kpi-spin 4s linear infinite', transformOrigin: '12px 12px' }} />
+                </svg>
+                <span style={{ position: 'absolute', inset: -6, borderRadius: 22, border: `1px solid ${color}20`, animation: 'kpi-ping 2.5s ease-out infinite 0.8s' }} />
+            </div>
+        );
+        return null;
+    };
+
     const kpis = [
-        { label: 'Slabs in Curing', value: elements.filter(e => e.status === 'Curing').length, icon: '🧱', color: 'var(--cyan)' },
-        { label: 'Ready to De-mould', value: elements.filter(e => e.status === 'Ready to De-mould').length, icon: '✅', color: 'var(--green)' },
-        { label: 'Total Elements', value: elements.length, icon: '📦', color: 'var(--orange)' },
-        { label: 'Active Sensors', value: elements.filter(e => e.status !== 'Completed').length, icon: '📡', color: 'var(--purple)' },
+        { label: 'Slabs in Curing', value: elements.filter(e => e.status === 'Curing').length, icon: 'curing', color: '#38bdf8' },
+        { label: 'Ready to De-mould', value: elements.filter(e => e.status === 'Ready to De-mould').length, icon: 'demould', color: '#4ade80' },
+        { label: 'Total Elements', value: elements.length, icon: 'total', color: '#fb923c' },
+        { label: 'Active Sensors', value: elements.filter(e => e.status !== 'Completed').length, icon: 'sensors', color: '#a78bfa' },
     ];
 
     return (
@@ -260,11 +316,18 @@ export default function Dashboard() {
             {/* KPI Row */}
             <div className="kpi-grid" style={{ marginBottom: 28 }}>
                 {kpis.map(k => (
-                    <div key={k.label} className="kpi-card">
-                        <div className="kpi-card" style={{ padding: 0, border: 'none', background: 'transparent' }}>
-                            <div style={{ fontSize: 28 }}>{k.icon}</div>
+                    <div key={k.label} className="kpi-card" style={{ position: 'relative', overflow: 'hidden' }}>
+                        {/* Subtle color bleed background */}
+                        <div style={{
+                            position: 'absolute', bottom: -20, right: -20,
+                            width: 90, height: 90, borderRadius: '50%',
+                            background: `radial-gradient(circle, ${k.color}18 0%, transparent 70%)`,
+                            pointerEvents: 'none',
+                        }} />
+                        <div style={{ padding: 0, border: 'none', background: 'transparent' }}>
+                            <KpiIcon type={k.icon} color={k.color} />
                             <div className="label">{k.label}</div>
-                            <div className="value" style={{ color: k.color }}>{k.value}</div>
+                            <div className="value" style={{ color: k.color, fontSize: 38, marginTop: 4 }}>{k.value}</div>
                         </div>
                     </div>
                 ))}
