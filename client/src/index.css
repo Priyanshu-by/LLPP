@@ -2,7 +2,7 @@
 
 /* ── Design tokens ──────────────────────────────────────────────────── */
 :root {
-  --bg-primary: #07090f;
+  --bg-primary: linear-gradient(135deg,#032c2e , #0f172a,#050204 );
   --bg-secondary: #0d1117;
   --bg-card: #111827;
   --bg-card-hover: #1a2438;
@@ -13,6 +13,7 @@
   --cyan-dim: rgba(56, 189, 248, 0.12);
   --orange: #fb923c;
   --orange-dim: rgba(251, 146, 60, 0.12);
+
   --green: #4ade80;
   --green-dim: rgba(74, 222, 128, 0.12);
   --purple: #a78bfa;
@@ -797,6 +798,70 @@ body {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* ===== Construction net + crane overlay ===== */
+.construction-net {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image: 
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 40px);
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* diagonal mesh overlay for scaffold/net effect */
+.construction-mesh {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 28px),
+                    repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 28px);
+  opacity: 0.5;
+}
+
+.crane {
+  position: absolute;
+  bottom: 8vh;
+  left: 6vw;
+  width: 140px;
+  height: auto;
+  opacity: 0.92;
+  transform: translateZ(0);
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+}
+
+/* Crane arm swing animation */
+.crane .arm { transform-origin: 14% 12%; animation: swing 6s ease-in-out infinite; }
+@keyframes swing {
+  0% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+  100% { transform: rotate(-3deg); }
+}
+
+/* subtle moving dashed guideline to look like construction planning net */
+.guide-line {
+  position: absolute;
+  top: 22vh;
+  left: 8vw;
+  width: 60vw;
+  height: 0;
+  border-top: 1px dashed rgba(255,255,255,0.06);
+  opacity: 0.6;
+  animation: slideLine 8s linear infinite;
+}
+@keyframes slideLine {
+  0% { background-position-x: 0; }
+  100% { background-position-x: 100%; }
+}
+
+/* reduce intensity on small screens */
+@media (max-width: 640px) {
+  .construction-net { opacity: 0.25; }
+  .crane { width: 90px; left: 4vw; bottom: 6vh; }
+}
+
 
 @media (max-width: 768px) {
   .main-content {

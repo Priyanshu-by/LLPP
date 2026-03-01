@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const API = 'http://localhost:5000/api';
-const RECORDS_KEY = 'apie_completed_records'; // localStorage key shared with Dashboard
+const RECORDS_KEY = 'constructai_completed_records'; // localStorage key shared with Dashboard
 
 // ── Cement label helpers ───────────────────────────────────────────────────
 const CEMENT_LABELS = { OPC43: 'OPC 43', OPC53: 'OPC 53', PPC: 'PPC' };

@@ -83,7 +83,7 @@ function SensorPanel({ sensor, weatherStatus }) {
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: 10, color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>ESP32-S3</div>
                         <div style={{ fontSize: 18, marginTop: 2 }}>🔲</div>
-                        <div style={{ fontSize: 9, color: 'var(--text-muted)' }}>APIE v1.0</div>
+                        <div style={{ fontSize: 9, color: 'var(--text-muted)' }}>Construct AI v1.0</div>
                     </div>
                     <div style={{ position: 'absolute', top: 6, right: 6, width: 7, height: 7, borderRadius: '50%', background: 'var(--green)', animation: 'blink 1s infinite', boxShadow: '0 0 8px var(--green)' }} />
                     {[0, 1, 2, 3].map(i => <div key={i} style={{ position: 'absolute', left: -6, top: 14 + i * 14, width: 6, height: 4, background: '#888', borderRadius: 1 }} />)}
@@ -139,7 +139,7 @@ export default function SmartSlab() {
 
     // Load saved geometry from sessionStorage so inputs persist between pages
     const savedGeo = (() => {
-        try { return JSON.parse(sessionStorage.getItem('apie_geometry') || '{}'); } catch { return {}; }
+        try { return JSON.parse(sessionStorage.getItem('constructai_geometry') || '{}'); } catch { return {}; }
     })();
 
     const [form, setForm] = useState({
@@ -207,7 +207,7 @@ export default function SmartSlab() {
             elementType: form.elementType, cementType: form.cementType,
             cement: +form.cement, sand: +form.sand, aggregate: +form.aggregate, water: +form.water,
         };
-        sessionStorage.setItem('apie_geometry', JSON.stringify(geometryPayload));
+    sessionStorage.setItem('constructai_geometry', JSON.stringify(geometryPayload));
 
         try {
             const payload = {
@@ -222,8 +222,8 @@ export default function SmartSlab() {
                 body: JSON.stringify(payload),
             });
             const json = await res.json();
-            if (json.success) {
-                sessionStorage.setItem('apie_prediction', JSON.stringify(json.data));
+                if (json.success) {
+                sessionStorage.setItem('constructai_prediction', JSON.stringify(json.data));
                 navigate('/analysis');
             } else {
                 alert('Analysis failed: ' + json.error);
@@ -262,7 +262,7 @@ export default function SmartSlab() {
                 }),
                 factors: { tempFactor: factor.toFixed(3), humidityFactor: (sensor.humidity >= 60 ? 1.0 : 0.9).toFixed(3), thicknessFactor: (h <= 0.2 ? 1.0 : 0.94).toFixed(3), wcFactor: (wcR <= 0.45 ? 1.0 : 0.90).toFixed(3) }
             };
-            sessionStorage.setItem('apie_prediction', JSON.stringify(mockResult));
+            sessionStorage.setItem('constructai_prediction', JSON.stringify(mockResult));
             navigate('/analysis');
         } finally {
             setLoading(false);

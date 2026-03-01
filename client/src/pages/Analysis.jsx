@@ -56,7 +56,7 @@ export default function Analysis() {
 
     // ── Load prediction from sessionStorage (set by SmartSlab) ───────────
     useEffect(() => {
-        const stored = sessionStorage.getItem('apie_prediction');
+        const stored = sessionStorage.getItem('constructai_prediction');
         let parsed = null;
         if (stored) {
             try { parsed = JSON.parse(stored); } catch { }
